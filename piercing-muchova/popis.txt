@@ -1,1 +1,0 @@
-V\tvořila jsem databázi, sloužící k rezervaci do fiktivního piercingového studia, kde si můžete vybrat například podobu šperku (barva, tloušťka) či jeho umístění a čas rezervace.
