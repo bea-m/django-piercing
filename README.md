@@ -1,1 +1,1 @@
-# Django - ukázková aplikace
+# Django - rezervace 
