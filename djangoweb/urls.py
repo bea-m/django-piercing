@@ -18,13 +18,18 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from myapp import views
 
 from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('myapp/', include('myapp.urls')),
-    path('', RedirectView.as_view(url='myapp/')),
+    path('', views.index, name="index"),
+    path('registration/', include("django.contrib.auth.urls")),
+    path('reservations/', views.ReservationList.as_view(), name="reservations"),
+    path('reservations/create', views.reservation_create, name="create"),
+    path('registration/signup', views.SignUpView.as_view(), name="signup"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

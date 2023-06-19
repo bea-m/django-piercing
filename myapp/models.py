@@ -3,6 +3,7 @@ import os
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 TELEFON_REGEX = RegexValidator(r'^[+]\d{3}( \d{3}){3}$', 'Wrong format')
 
@@ -10,10 +11,7 @@ TELEFON_REGEX = RegexValidator(r'^[+]\d{3}( \d{3}){3}$', 'Wrong format')
 # Create your models here.
 
 class Client(models.Model):
-    name = models.CharField(max_length=50, verbose_name='First name', help_text='Enter your first name',
-                            error_messages={'blank': 'The field has to be filled'})
-    surname = models.CharField(max_length=50, verbose_name='Surname', help_text='Enter your surname',
-                               error_messages={'blank': 'The field has to be filled'})
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True, verbose_name='Email', help_text='Enter your email',
                               error_messages={'unique': 'This email adress is already in use',
                                               'invalid': 'Invalid email adress',
@@ -23,12 +21,12 @@ class Client(models.Model):
                              blank=True, validators=[TELEFON_REGEX])
 
     class Meta:
-        ordering = ['surname', 'name']
+        ordering = ['client']
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
     def __str__(self):
-        return f'{self.surname}, {self.name}'
+        return f'{self.client}'
 
 
 class Piercer(models.Model):
@@ -98,10 +96,10 @@ class Salon(models.Model):
 class Reservation(models.Model):
     customer = models.ForeignKey("Client", on_delete=models.CASCADE)
     piercer = models.ForeignKey("Piercer", on_delete=models.CASCADE)
-    piercing = models.OneToOneField(Piercing, on_delete=models.CASCADE)
+    piercing = models.ForeignKey(Piercing, on_delete=models.CASCADE)
     date = models.DateTimeField()
     city = models.ForeignKey("Salon", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.customer}, {self.date}'
+        return f'{self.customer}, {self.date}, {self.piercing}'
 
